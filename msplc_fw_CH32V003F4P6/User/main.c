@@ -15,26 +15,8 @@
 */
 
 /*
-    If we have a Web App, can we code in C++ within the WebAbb which pre-compiles
-    and load into the target.
-*/
-
-/*
-    Hyp :
-        We have a Web App coded/AI Studio
-        Code written in C++ (Arduino Style)
-        Compile into binary that loads into a target's interpreter
-*/
-
-/*
-    web App can do:
-
-    loop() {
-	...
-    }
-
-    >> [Compile] >> [Load into Target]
-
+    - Define the intermediary language
+    - Manufacture Sample Firmware & IDE
 */
 
 /********************************** (C) COPYRIGHT *******************************
