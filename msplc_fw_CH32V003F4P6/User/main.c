@@ -95,7 +95,7 @@ int main(void)
             /* waiting for receiving finish */
         }
         val = (USART_ReceiveData(USART1));
-        USART_SendData(USART1, ~val);
+        USART_SendData(USART1, val);
         while(USART_GetFlagStatus(USART1, USART_FLAG_TXE) == RESET)
         {
             /* waiting for sending finish */
