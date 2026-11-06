@@ -5,9 +5,7 @@
  * Date               : 2026-11-05
  * Description        : MSPLC Firmware for CH32V003 MCU
  *********************************************************************************
- * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
- * Attention: This software (modified or not) and binary are used for 
- * microcontroller manufactured by Nanjing Qinheng Microelectronics.
+ * Copyright (c) 2026 GPL v3 Chrysalide Engineering
  *******************************************************************************/
 
 /*
@@ -90,15 +88,40 @@ int main(void)
     while(1)
     {
 
-        while(USART_GetFlagStatus(USART1, USART_FLAG_RXNE) == RESET)
-        {
-            /* waiting for receiving finish */
+        // Quick test:
+
+        const char * anim [] = {
+                ".......*\0", /* 0 */
+                "......*.\0", /* 1 */
+                ".....*..\0", /* 2 */
+                "....*...\0", /* 3 */
+                "...*....\0", /* 4 */
+                "..*.....\0", /* 5 */
+                ".*......\0", /* 6 */
+                "*.......\0"}; /* 7 */
+
+        static int run = 1;
+
+        static int j = 0;
+        static int k = 1;
+
+        if (run ) {
+            if ((j < 7) && (k == 1)) {
+                j += k;
+            } else if ((j > 0) && (k == -1)) {
+                j += k;
+            } else {
+                k = -k;
+                j += k;
+            }
+            printf("%s %d %d\r\n", anim[j], j, k);
         }
-        val = (USART_ReceiveData(USART1));
-        USART_SendData(USART1, val);
-        while(USART_GetFlagStatus(USART1, USART_FLAG_TXE) == RESET)
-        {
-            /* waiting for sending finish */
-        }
+
+        Delay_Ms(50);
+
+        // while(USART_GetFlagStatus(USART1, USART_FLAG_RXNE) == RESET) { /* waiting rx */ }
+        // val = (USART_ReceiveData(USART1));
+        // USART_SendData(USART1, val);
+        // while(USART_GetFlagStatus(USART1, USART_FLAG_TXE) == RESET) { /* waiting tx */ }
     }
 }
