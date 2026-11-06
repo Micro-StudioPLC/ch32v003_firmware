@@ -1,3 +1,42 @@
+/*
+    PLC Open source GPL v3 including
+    - Embedded C Firmware GPL v3
+    - GUI as Web browser application GPL v3
+        - Web application/Website has to
+        * Do people generally like/want to use PLC Style Programming ?
+        Function block : FBD
+        Ladder : LD
+        Structured Text : SFC
+        Or should we do a C/C++ Native PLC controller
+
+        Applications should include
+            Home Gateways
+            Home controls/automations
+*/
+
+/*
+    If we have a Web App, can we code in C++ within the WebAbb which pre-compiles
+    and load into the target.
+*/
+
+/*
+    Hyp :
+        We have a Web App coded/AI Studio
+        Code written in C++ (Arduino Style)
+        Compile into binary that loads into a target's interpreter
+*/
+
+/*
+    web App can do:
+
+    loop() {
+	...
+    }
+
+    >> [Compile] >> [Load into Target]
+
+*/
+
 /********************************** (C) COPYRIGHT *******************************
  * File Name          : main.c
  * Author             : JF Simon
