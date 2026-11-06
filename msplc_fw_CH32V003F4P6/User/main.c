@@ -1,9 +1,9 @@
 /********************************** (C) COPYRIGHT *******************************
  * File Name          : main.c
- * Author             : WCH
+ * Author             : JF Simon
  * Version            : V1.0.0
- * Date               : 2023/12/25
- * Description        : Main program body.
+ * Date               : 2026-11-05
+ * Description        : MSPLC Firmware for CH32V003 MCU
  *********************************************************************************
  * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
  * Attention: This software (modified or not) and binary are used for 
