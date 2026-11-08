@@ -62,8 +62,6 @@ void USARTx_CFG(void)
     GPIO_InitTypeDef  GPIO_InitStructure = {0};
     USART_InitTypeDef USART_InitStructure = {0};
 
-    RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOD | RCC_APB2Periph_USART1, ENABLE);
-
     /* USART1 TX-->D.5   RX-->D.6 */
     GPIO_InitStructure.GPIO_Pin = GPIO_Pin_5;
     GPIO_InitStructure.GPIO_Speed = GPIO_Speed_30MHz;
@@ -84,33 +82,31 @@ void USARTx_CFG(void)
     USART_Cmd(USART1, ENABLE);
 }
 
-/*********************************************************************
- * @fn      main
- *
- * @brief   Main program.
- *
- * @return  none
- */
-int main(void)
-{
-    NVIC_PriorityGroupConfig(NVIC_PriorityGroup_1);
-    SystemCoreClockUpdate();
-    Delay_Init();
-#if (SDI_PRINT == SDI_PR_OPEN)
-    SDI_Printf_Enable();
-#else
-    USART_Printf_Init(115200);
-#endif
-    printf("SystemClk:%d\r\n",SystemCoreClock);
-    printf( "ChipID:%08x\r\n", DBGMCU_GetCHIPID() );
+// Enable Clocks for Ports and pins
+void setup_pins() {
+    RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOC | RCC_APB2Periph_GPIOD | RCC_APB2Periph_USART1, ENABLE);
 
-    USARTx_CFG();
+    GPIO_InitTypeDef  GPIO_InitStructure = {0};
+    USART_InitTypeDef USART_InitStructure = {0};
 
-    while(1)
-    {
+    // PC0 as output
+    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_0;
+    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_30MHz;
+    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
+    GPIO_Init(GPIOC, &GPIO_InitStructure);
+}
 
-        // Quick test:
+// #define TEST1
+#define TEST2
+// #define TEST3
 
+void test_1_loop() {
+        GPIOC->BSHR = (1 << 0); // PC3 (Led) to High
+        Delay_Ms(300);
+        GPIOC->BCR = (1 << 0); // PC3 (Led) to Low
+        Delay_Ms(300);
+}
+void test_2_serial() {
         const char * anim [] = {
                 ".......*\0", /* 0 */
                 "......*.\0", /* 1 */
@@ -137,12 +133,63 @@ int main(void)
             }
             printf("%s %d %d\r\n", anim[j], j, k);
         }
-
         Delay_Ms(50);
+}
 
-        // while(USART_GetFlagStatus(USART1, USART_FLAG_RXNE) == RESET) { /* waiting rx */ }
-        // val = (USART_ReceiveData(USART1));
-        // USART_SendData(USART1, val);
-        // while(USART_GetFlagStatus(USART1, USART_FLAG_TXE) == RESET) { /* waiting tx */ }
+void test_3_serial_readback() {
+        while(USART_GetFlagStatus(USART1, USART_FLAG_RXNE) == RESET) { /* waiting rx */ }
+        val = (USART_ReceiveData(USART1));
+        USART_SendData(USART1, val);
+        while(USART_GetFlagStatus(USART1, USART_FLAG_TXE) == RESET) { /* waiting tx */ }
+}
+
+void tests() {
+    #ifdef TEST1
+    while(1) {
+        test_1_loop();
+    }
+    #endif
+
+    #ifdef TEST2
+    while(1) {
+        test_2_serial();
+    }
+    #endif
+
+    #ifdef TEST3
+    while(1) {
+        test_3_serial_readback();
+    }
+    #endif
+}
+
+/*********************************************************************
+ * @fn      main
+ *
+ * @brief   Main program.
+ *
+ * @return  none
+ */
+int main(void)
+{
+    NVIC_PriorityGroupConfig(NVIC_PriorityGroup_1);
+    SystemCoreClockUpdate();
+    Delay_Init();
+#if (SDI_PRINT == SDI_PR_OPEN)
+    SDI_Printf_Enable();
+#else
+    USART_Printf_Init(115200);
+#endif
+    printf("SystemClk:%d\r\n",SystemCoreClock);
+    printf( "ChipID:%08x\r\n", DBGMCU_GetCHIPID() );
+
+    setup_pins();
+    USARTx_CFG();
+
+    tests();
+
+    printf("Main program run\r\n");
+    while(1)
+    {
     }
 }
